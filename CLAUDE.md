@@ -33,4 +33,3 @@ No hay suite de tests: verificar cambios jugando en el navegador.
 ## Quirks conocidos (código actual)
 
 - `togglePause` al reanudar no vuelve a ocultar el overlay.
-- `endGame` llamado desde `loop` cancela el frame, pero `loop` vuelve a pedir `requestAnimationFrame` después → el bucle sigue tras Game Over.
