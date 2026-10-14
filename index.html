@@ -44,10 +44,31 @@
             <li><kbd>↑</kbd> rotar</li>
             <li><kbd>↓</kbd> bajar</li>
             <li><kbd>Space</kbd> caída</li>
-            <li><kbd>P</kbd> pausa</li>
+            <li><kbd>P</kbd> / <kbd>Esc</kbd> pausa</li>
           </ul>
         </div>
       </aside>
+    </div>
+
+    <div id="pause-menu" class="overlay hidden" role="dialog" aria-label="Pausa">
+      <div class="pause-box">
+        <p class="pause-title">PAUSA</p>
+        <button id="pause-resume" type="button">Reanudar</button>
+        <button id="pause-restart" type="button">Reiniciar</button>
+        <label class="pause-level">Nivel inicial
+          <select id="start-level"></select>
+        </label>
+        <details class="pause-controls">
+          <summary>Ver controles</summary>
+          <ul>
+            <li><kbd>←</kbd><kbd>→</kbd> mover</li>
+            <li><kbd>↑</kbd> / <kbd>X</kbd> rotar</li>
+            <li><kbd>↓</kbd> bajar</li>
+            <li><kbd>Space</kbd> caída</li>
+            <li><kbd>P</kbd> / <kbd>Esc</kbd> pausa</li>
+          </ul>
+        </details>
+      </div>
     </div>
 
     <div id="overlay" class="overlay hidden">
@@ -59,6 +80,7 @@
     </div>
   </div>
 
+  <script src="pause-menu.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

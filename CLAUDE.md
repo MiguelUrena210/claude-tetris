@@ -22,14 +22,11 @@ No hay suite de tests: verificar cambios jugando en el navegador.
 - Rotación: `rotateCW` (transpuesta + reverso) + wall kicks en `tryRotate` (`[0,-1,1,-2,2]` columnas). No es SRS.
 - Ciclo: `loop` (rAF) acumula `dt` → al superar `dropInterval` baja pieza o `lockPiece()` (`merge` → `clearLines` → `spawn`). `spawn` con colisión → `endGame()`.
 - Puntuación/nivel en `clearLines`: `LINE_SCORES[n] * level`; nivel = `floor(lines/10)+1`; `dropInterval = max(100, 1000 - (level-1)*90)`. Hard drop +2/celda, soft drop +1/fila.
-- Overlay único (`#overlay`) reutilizado para PAUSA y GAME OVER.
+- `#overlay` solo para GAME OVER. Pausa (`P`/`Esc`) = `#pause-menu` gestionado por `pause-menu.js` (global `Pause`: `isOpen/cooling/startLevel/show/hide`; se carga antes de `game.js`). Con el menú abierto o en cooldown 150 ms tras cerrar, `keydown` ignora teclas de juego.
+- Nivel inicial (`localStorage 'startLevel'`, 1–10): `init()` usa `level = Pause.startLevel()`; `clearLines` usa `max(startLevel, floor(lines/10)+1)`. Se aplica al reiniciar.
 
 ## Acoplamientos a mantener
 
 - Canvas `#board` en `index.html` debe medir `COLS*BLOCK × ROWS*BLOCK` (300×600).
 - `drawNext` asume preview 4×4 de 30px (`NB = 30`) ↔ `#next-canvas` 120×120.
 - Controles listados en tres sitios: handler `keydown` de `game.js`, panel de `index.html` y tabla del README.
-
-## Quirks conocidos (código actual)
-
-- `togglePause` al reanudar no vuelve a ocultar el overlay.
