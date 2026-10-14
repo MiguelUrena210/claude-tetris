@@ -44,10 +44,12 @@ jobs:
             1. Lee el issue con `gh issue view ${{ github.event.issue.number }} --comments` y los labels disponibles con `gh label list`.
             2. Lee el código relevante (game.js, index.html, CLAUDE.md, README.md) para diagnosticar.
             3. Asigna con `gh issue edit ${{ github.event.issue.number }} --add-label "a,b"` solo labels que ya existan (no crees nuevos). Elige los que apliquen (ej. bug, enhancement, documentation, question, accessibility, duplicate, invalid).
-            4. Publica un único comentario de diagnóstico en español, que empiece con `<!-- claude-triage -->`. Si ya existe un comentario con ese marcador (evento edited), actualízalo con `gh issue comment ${{ github.event.issue.number }} --edit-last`; si no, créalo con `gh issue comment`.
-               Usa este formato markdown profesional exacto (tras el marcador, sin texto adicional fuera de la plantilla):
+            4. Escribe el comentario de diagnóstico en español con la herramienta Write en `triage-comment.md` (debe empezar con `<!-- claude-triage -->`) y publícalo OBLIGATORIAMENTE en el issue #${{ github.event.issue.number }} con exactamente este comando (sin heredoc, sin `$(...)`, sin `--body`):
+               `gh issue comment ${{ github.event.issue.number }} --edit-last --create-if-none --body-file triage-comment.md`
+               Esto actualiza tu comentario previo (evento edited) o crea uno nuevo (evento opened). El paso no termina hasta que el comando haya tenido éxito; verifícalo con `gh issue view ${{ github.event.issue.number }} --comments`.
+               Usa este formato markdown profesional exacto (sin texto adicional fuera de la plantilla):
 
-               ```
+               ~~~
                <!-- claude-triage -->
                ## 🔍 Triage del issue
 
@@ -76,8 +78,8 @@ jobs:
 
                ---
                <sub>Diagnóstico automático generado por Claude. Un mantenedor debe revisarlo.</sub>
-               ```
+               ~~~
 
                Reglas: omite "Causa probable" y "Solución sugerida" si el issue no es un bug/mejora (ej. pregunta); usa `código` para identificadores y rutas; sin texto de relleno.
             No modifiques código ni cierres el issue.
-          claude_args: '--allowedTools "Read,Glob,Grep,Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh search issues:*)"'
+          claude_args: '--allowedTools "Read,Write,Glob,Grep,Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh search issues:*)"'
