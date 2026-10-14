@@ -45,7 +45,39 @@ jobs:
             2. Lee el código relevante (game.js, index.html, CLAUDE.md, README.md) para diagnosticar.
             3. Asigna con `gh issue edit ${{ github.event.issue.number }} --add-label "a,b"` solo labels que ya existan (no crees nuevos). Elige los que apliquen (ej. bug, enhancement, documentation, question, accessibility, duplicate, invalid).
             4. Publica un único comentario de diagnóstico en español, que empiece con `<!-- claude-triage -->`. Si ya existe un comentario con ese marcador (evento edited), actualízalo con `gh issue comment ${{ github.event.issue.number }} --edit-last`; si no, créalo con `gh issue comment`.
-               Contenido: **Tipo**, **Resumen**, **Causa probable** (archivo:línea), **Solución sugerida**, **Severidad** (baja/media/alta).
-               Si falta información para reproducir, indícalo y pide los datos concretos.
+               Usa este formato markdown profesional exacto (tras el marcador, sin texto adicional fuera de la plantilla):
+
+               ```
+               <!-- claude-triage -->
+               ## 🔍 Triage del issue
+
+               | Campo | Valor |
+               | --- | --- |
+               | **Tipo** | bug / mejora / documentación / pregunta |
+               | **Severidad** | 🟢 Baja / 🟡 Media / 🔴 Alta |
+               | **Labels** | `label1`, `label2` |
+
+               ### 📝 Resumen
+               Descripción breve (1-3 frases) del problema o la petición.
+
+               ### 🎯 Causa probable
+               - Explicación concisa, con referencias `archivo:línea` (ej. `game.js:123`).
+
+               ### 🛠️ Solución sugerida
+               1. Paso concreto.
+               2. Paso concreto.
+
+               ```js
+               // Fragmento de código opcional, solo si aclara la solución
+               ```
+
+               ### ❓ Información pendiente
+               - Solo si falta información para reproducir: lista de datos concretos a aportar. Omite esta sección si no aplica.
+
+               ---
+               <sub>Diagnóstico automático generado por Claude. Un mantenedor debe revisarlo.</sub>
+               ```
+
+               Reglas: omite "Causa probable" y "Solución sugerida" si el issue no es un bug/mejora (ej. pregunta); usa `código` para identificadores y rutas; sin texto de relleno.
             No modifiques código ni cierres el issue.
           claude_args: '--allowedTools "Read,Glob,Grep,Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label list:*),Bash(gh search issues:*)"'
