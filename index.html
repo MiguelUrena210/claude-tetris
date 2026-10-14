@@ -54,11 +54,29 @@
       <div class="overlay-box">
         <p id="overlay-title">GAME OVER</p>
         <p id="overlay-score"></p>
+        <div id="records-over" class="records hidden">
+          <p class="records-title">TOP 5</p>
+          <table class="records-table"><tbody id="records-over-body"></tbody></table>
+          <p id="over-stats" class="records-stats"></p>
+          <button type="button" class="records-reset">Resetear records</button>
+        </div>
         <button id="restart-btn">Reiniciar</button>
+      </div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+      <div class="overlay-box records">
+        <p class="start-title">TETRIS</p>
+        <p class="records-title">TOP 5</p>
+        <table class="records-table"><tbody id="start-records"></tbody></table>
+        <p id="start-stats" class="records-stats"></p>
+        <button id="play-btn" type="button">Jugar</button>
+        <button type="button" class="records-reset">Resetear records</button>
       </div>
     </div>
   </div>
 
+  <script src="records.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

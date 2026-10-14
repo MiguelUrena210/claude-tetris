@@ -129,6 +129,9 @@ function clearLines() {
     level = Math.floor(lines / 10) + 1;
     dropInterval = Math.max(100, 1000 - (level - 1) * 90);
     updateHUD();
+    Records.onLinesCleared(cleared);
+  } else {
+    Records.onLockNoClear();
   }
 }
 
@@ -244,6 +247,7 @@ function endGame() {
   overlayTitle.textContent = 'GAME OVER';
   overlayScore.textContent = `Puntuación: ${score.toLocaleString()}`;
   overlay.classList.remove('hidden');
+  Records.onGameOver(score, lines, level);
 }
 
 function togglePause() {
@@ -282,6 +286,7 @@ function init() {
   score = 0;
   lines = 0;
   level = 1;
+  Records.onInit();
   paused = false;
   gameOver = false;
   dropInterval = 1000;
@@ -331,4 +336,6 @@ themeToggle.addEventListener('click', () => {
 
 loadTheme();
 
-init();
+// El juego arranca desde la pantalla de inicio (botón "Jugar" → init()).
+gameOver = true;
+Records.showStart();
