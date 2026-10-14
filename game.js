@@ -4,18 +4,6 @@ const COLS = 10;
 const ROWS = 20;
 const BLOCK = 30;
 
-const COLORS = [
-  null,
-  '#4dd0e1', // I - cyan
-  '#ffd54f', // O - yellow
-  '#ba68c8', // T - purple
-  '#81c784', // S - green
-  '#e57373', // Z - red
-  '#90caf9', // J - pale blue
-  '#ffb74d', // L - orange
-  '#ff4081', // O3 - rosa intenso (anillo 3x3)
-];
-
 const PIECES = [
   null,
   [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]], // I
@@ -43,6 +31,7 @@ const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const themeText = document.getElementById('theme-text');
+const skinSelect = document.getElementById('skin-select');
 
 let gridColor;
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
@@ -60,6 +49,17 @@ function loadTheme() {
   let saved = null;
   try { saved = localStorage.getItem('theme'); } catch (e) {}
   applyTheme(saved === 'light' ? 'light' : 'dark');
+}
+
+function applySkin(name) {
+  skinSelect.value = Skins.set(name);
+  if (current) { draw(); drawNext(); }
+}
+
+function loadSkin() {
+  let saved = null;
+  try { saved = localStorage.getItem('skin'); } catch (e) {}
+  applySkin(saved);
 }
 
 function createBoard() {
@@ -178,18 +178,17 @@ function updateHUD() {
 
 function drawBlock(context, x, y, colorIndex, size, alpha) {
   if (!colorIndex) return;
-  const color = COLORS[colorIndex];
-  context.globalAlpha = alpha ?? 1;
-  context.fillStyle = color;
-  context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
-  // highlight
-  context.fillStyle = 'rgba(255,255,255,0.12)';
-  context.fillRect(x * size + 1, y * size + 1, size - 2, 4);
-  context.globalAlpha = 1;
+  Skins.active.drawBlock(context, x * size, y * size, size, Skins.active.colors[colorIndex], alpha ?? 1);
+}
+
+function clearCanvas(c, cv) {
+  const bg = Skins.active.background;
+  if (bg) { c.fillStyle = bg; c.fillRect(0, 0, cv.width, cv.height); }
+  else c.clearRect(0, 0, cv.width, cv.height);
 }
 
 function drawGrid() {
-  ctx.strokeStyle = gridColor;
+  ctx.strokeStyle = Skins.active.grid || gridColor;
   ctx.lineWidth = 0.5;
   for (let c = 1; c < COLS; c++) {
     ctx.beginPath();
@@ -206,7 +205,7 @@ function drawGrid() {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  clearCanvas(ctx, canvas);
   drawGrid();
 
   // board
@@ -229,7 +228,7 @@ function draw() {
 
 function drawNext() {
   const NB = 30;
-  nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+  clearCanvas(nextCtx, nextCanvas);
   const shape = next.shape;
   const offX = Math.floor((4 - shape[0].length) / 2);
   const offY = Math.floor((4 - shape.length) / 2);
@@ -329,6 +328,13 @@ themeToggle.addEventListener('click', () => {
   themeToggle.blur(); // evita que Space (caída) reactive el botón
 });
 
+skinSelect.addEventListener('change', () => {
+  applySkin(skinSelect.value);
+  try { localStorage.setItem('skin', skinSelect.value); } catch (e) {}
+  skinSelect.blur(); // evita que Space (caída) reabra el select
+});
+
 loadTheme();
+loadSkin();
 
 init();
