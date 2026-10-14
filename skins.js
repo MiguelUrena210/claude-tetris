@@ -61,6 +61,9 @@ const SKINS = {
       ctx.fillStyle = color;
       roundRectPath(ctx, px + 2, py + 2, size - 4, size - 4, 8);
       ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
       ctx.fillStyle = 'rgba(255,255,255,0.45)';
       roundRectPath(ctx, px + 6, py + 5, size - 14, 4, 2);
       ctx.fill();
@@ -74,7 +77,7 @@ const SKINS = {
     background: null,
     grid: null,
     drawBlock(ctx, px, py, size, color, alpha) {
-      const n = 6, p = Math.floor((size - 2) / n), ox = px + 1, oy = py + 1;
+      const n = 7, p = Math.floor((size - 2) / n), ox = px + 1, oy = py + 1;
       ctx.globalAlpha = alpha;
       ctx.fillStyle = color;
       ctx.fillRect(ox, oy, p * n, p * n);
