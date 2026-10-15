@@ -266,3 +266,21 @@ kbd {
   font: inherit;
   cursor: pointer;
 }
+/* ---- Records ---- */
+#start-screen { z-index: 2; }
+.records.hidden { display: none; }
+.records { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.start-title { font-size: 32px; font-weight: 800; letter-spacing: 6px; color: var(--accent); }
+.records-title { font-size: 14px; font-weight: 700; letter-spacing: 3px; color: var(--label); }
+.records-table { border-collapse: collapse; font-family: 'Courier New', Courier, monospace; font-size: 13px; min-width: 240px; }
+.records-table td { padding: 3px 8px; text-align: left; }
+.records-table .rec-num { text-align: right; }
+.records-table .rec-rank { color: var(--muted); }
+.records-table .rec-empty { text-align: center; color: var(--muted); }
+.records-table tr.rec-highlight { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.rec-input { width: 100%; font: inherit; padding: 2px 4px; border: 1px solid var(--border); border-radius: 4px; background: var(--board-bg); color: var(--text); }
+.records-stats { font-size: 12px; color: var(--muted); }
+#play-btn { margin-top: 6px; background: var(--accent); color: var(--on-accent); border: none; border-radius: 6px; padding: 10px 28px; font-size: 14px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+#play-btn:hover { background: var(--accent-hover); }
+.records-reset { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 4px 12px; font-size: 11px; cursor: pointer; }
+.records-reset:hover { color: var(--danger); border-color: var(--danger); }

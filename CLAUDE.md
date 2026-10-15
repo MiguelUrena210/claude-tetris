@@ -22,6 +22,9 @@ No hay suite de tests: verificar cambios jugando en el navegador.
 - Rotación: `rotateCW` (transpuesta + reverso) + wall kicks en `tryRotate` (`[0,-1,1,-2,2]` columnas). No es SRS.
 - Ciclo: `loop` (rAF) acumula `dt` → al superar `dropInterval` baja pieza o `lockPiece()` (`merge` → `clearLines` → `spawn`). `spawn` con colisión → `endGame()`.
 - Puntuación/nivel en `clearLines`: `LINE_SCORES[n] * level`; nivel = `floor(lines/10)+1`; `dropInterval = max(100, 1000 - (level-1)*90)`. Hard drop +2/celda, soft drop +1/fila.
+- `records.js` (cargado antes de `game.js`): módulo global `Records` (Top 5 + mejor combo + líneas máx en `localStorage['tetris.records']` = `{top:[{name,score,lines,level,combo,date}], bestCombo, maxLines}`, validado al parsear). Hooks en `game.js`: `Records.onInit()` (en `init`), `onLinesCleared(n)`/`onLockNoClear()` (en `clearLines`, combo = limpiezas consecutivas), `onGameOver(score, lines, level)` (en `endGame`), `showStart()` (arranque). Nombres siempre con `textContent`.
+- Arranque: el juego no inicia solo; `#start-screen` muestra records y su botón "Jugar" llama a `init()`. Al cargar `gameOver = true` para que `keydown` no toque `current` indefinido.
+- Game over: si entra en el top, input de nombre (`keydown` con `stopPropagation`; Enter guarda; Reiniciar sin confirmar guarda como "Anónimo").
 - Overlay único (`#overlay`) reutilizado para PAUSA y GAME OVER.
 - `skins.js` (cargado antes de `game.js`): `SKINS = {retro, neon, pastel, pixel}`, cada uno `{name, colors[0..8], background|null, grid|null, drawBlock(ctx, px, py, size, color, alpha)}`; `Skins.active` / `Skins.set(name)`. `drawBlock` de `game.js` delega en la skin activa (único punto de dibujo de bloques). Con `background` el canvas se rellena (`clearCanvas`); con `null` se usa el CSS del tema. Preferencia en `localStorage` clave `skin`; selector `#skin-select`. Skins con `shadowBlur` deben resetearlo a 0.
 
