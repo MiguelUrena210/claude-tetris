@@ -34,6 +34,7 @@ const themeText = document.getElementById('theme-text');
 const skinSelect = document.getElementById('skin-select');
 
 let gridColor;
+let baseLevel = 1;
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
 
 function applyTheme(theme) {
@@ -126,7 +127,7 @@ function clearLines() {
   if (cleared) {
     lines += cleared;
     score += (LINE_SCORES[cleared] || 0) * level;
-    level = Math.floor(lines / 10) + 1;
+    level = Math.max(baseLevel, Math.floor(lines / 10) + 1);
     dropInterval = Math.max(100, 1000 - (level - 1) * 90);
     updateHUD();
     Records.onLinesCleared(cleared);
@@ -253,13 +254,13 @@ function togglePause() {
   if (gameOver) return;
   paused = !paused;
   if (!paused) {
+    Pause.hide();
     lastTime = performance.now();
+    dropAccum = 0;
     loop(lastTime);
   } else {
     cancelAnimationFrame(animId);
-    overlayTitle.textContent = 'PAUSA';
-    overlayScore.textContent = '';
-    overlay.classList.remove('hidden');
+    Pause.show();
   }
 }
 
@@ -284,24 +285,26 @@ function init() {
   board = createBoard();
   score = 0;
   lines = 0;
-  level = 1;
   Records.onInit();
+  baseLevel = Pause.startLevel();
+  level = baseLevel;
   paused = false;
   gameOver = false;
-  dropInterval = 1000;
+  dropInterval = Math.max(100, 1000 - (level - 1) * 90);
   dropAccum = 0;
   lastTime = performance.now();
   next = randomPiece();
   spawn();
   updateHUD();
   overlay.classList.add('hidden');
+  Pause.hide();
   cancelAnimationFrame(animId);
   animId = requestAnimationFrame(loop);
 }
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'KeyP') { togglePause(); return; }
-  if (paused || gameOver) return;
+  if (e.code === 'KeyP' || (e.code === 'Escape' && e.target.tagName !== 'SELECT')) { if (!e.repeat) togglePause(); return; }
+  if (paused || gameOver || Pause.isOpen() || Pause.cooling()) return;
   switch (e.code) {
     case 'ArrowLeft':
       if (!collide(current.shape, current.x - 1, current.y)) current.x--;

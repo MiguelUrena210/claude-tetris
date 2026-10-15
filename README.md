@@ -41,8 +41,9 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Vista previa** de la siguiente pieza.
 - **Sistema de puntuación** clásico de Tetris (100 / 300 / 500 / 800 multiplicado por nivel).
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
-- **Pausa** y **Game Over** con opción de reinicio.
 - **Records locales** (`records.js`): Top 5 con nombre (campo de texto al hacer Game Over), mejor combo y líneas máximas, guardados en `localStorage` (`tetris.records`). Se muestran en la pantalla de inicio y en Game Over; botón "Resetear records" para borrarlos.
+- **Menú de pausa** (`P`/`Esc`): Reanudar, Reiniciar, Ver controles y Nivel inicial (1–10, guardado en `localStorage`). Los controles del juego quedan bloqueados mientras está abierto.
+- **Game Over** con opción de reinicio.
 
 ---
 
@@ -85,7 +86,7 @@ Después abre `http://localhost:8000` en el navegador.
 | `↑` o `X` | Rotar la pieza en sentido horario |
 | `↓`       | Soft drop (bajar más rápido)      |
 | `Espacio` | Hard drop (caída instantánea)     |
-| `P`       | Pausar / reanudar                 |
+| `P` / `Esc` | Pausar / reanudar (menú de pausa) |
 
 Selector **Skin** (arriba a la izquierda): Retro, Neon, Pastel y Pixel art. Se guarda en `localStorage`.
 
@@ -101,13 +102,17 @@ Define la estructura visual:
 
 - Un `<canvas id="board">` de **300 × 600** píxeles donde se renderiza el tablero.
 - Un panel lateral con `SCORE`, `LINES`, `LEVEL`, vista de la siguiente pieza y la lista de controles.
-- Un overlay para los estados **PAUSA** y **GAME OVER**.
+- Un overlay `#pause-menu` para la pausa y otro `#overlay` para **GAME OVER**.
 
 ### 2. `style.css`
 
 Aporta el aspecto visual con estética _dark / retro arcade_: fondo oscuro, tipografía monoespaciada para los marcadores y _backdrop blur_ en los overlays.
 
-### 3. `game.js`
+### 3. `pause-menu.js`
+
+Menú de pausa (global `Pause`): `isOpen()`, `cooling()` (150 ms tras cerrar; descarta teclas mantenidas), `startLevel()`, `show()`, `hide()`. Se carga antes de `game.js`.
+
+### 4. `game.js`
 
 Contiene toda la lógica del juego. A grandes rasgos:
 
@@ -162,6 +167,7 @@ Cuando una pieza recién generada ya colisiona al aparecer (`spawn`), se dispara
 ├── index.html      # Estructura del DOM y canvas
 ├── style.css       # Estilos del juego (dark theme)
 ├── records.js      # Tabla de records en localStorage
+├── pause-menu.js   # Menú de pausa y nivel inicial
 ├── game.js         # Toda la lógica del Tetris (~300 líneas)
 └── README.md
 ```
